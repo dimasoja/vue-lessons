@@ -10,7 +10,7 @@
     </div>
     <!-- new note -->
     <newNote :note="note" @addNote="addNote" />
-    <notes  :notes="notes" />
+    <notes  :notes="notes" @remove="removeNote" />
     <!-- note list -->
    
     </div>
@@ -80,7 +80,10 @@ export default {
       this.message = null
       this.note.title = ''
       this.note.descr = ''
-    }
+    },
+    removeNote(index){
+      this.notes.splice(index, 1)
+    }  
   }
 }
 </script>

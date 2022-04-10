@@ -2,7 +2,7 @@
   <div class="new-note">
       <input v-model="note.title" type="text">
       <textarea v-model="note.descr"></textarea>
-      <button class="btn btnPrimary" @click="addNote">New note</button>
+      <button class="btn btnPrimary btnStyle" @click="addNote">New note</button>
   </div>
 </template>
 
@@ -23,3 +23,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.new-note { 
+  text-align: center;
+}
+
+.btnStyle{
+  margin-top: 10px;
+}
+</style>
