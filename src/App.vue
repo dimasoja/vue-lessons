@@ -13,6 +13,11 @@
 
     <div class="note-header">
       <h1> {{ title }} </h1>
+     
+       <search
+              :value="search"
+              placeholder="Find your note"
+              @search="search = $event"/>
       <div class="icons"> 
           <svg  :class="{ active: grid }" @click="grid=true" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="24" width="24" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
               <path d="M0 2.40909C0 2.68523 0.223858 2.90909 0.5 2.90909H2.40909C2.68523 2.90909 2.90909 2.68523 2.90909 2.40909V0.500001C2.90909 0.223858 2.68523 0 2.40909 0H0.500001C0.223858 0 0 0.223858 0 0.5V2.40909ZM4.36364 11.1364C4.36364 11.4125 4.58749 11.6364 4.86364 11.6364H6.77273C7.04887 11.6364 7.27273 11.4125 7.27273 11.1364V9.22727C7.27273 8.95113 7.04887 8.72727 6.77273 8.72727H4.86364C4.58749 8.72727 4.36364 8.95113 4.36364 9.22727V11.1364ZM0 11.1364C0 11.4125 0.223858 11.6364 0.5 11.6364H2.40909C2.68523 11.6364 2.90909 11.4125 2.90909 11.1364V9.22727C2.90909 8.95113 2.68523 8.72727 2.40909 8.72727H0.500001C0.223858 8.72727 0 8.95113 0 9.22727V11.1364ZM0 6.77273C0 7.04887 0.223858 7.27273 0.5 7.27273H2.40909C2.68523 7.27273 2.90909 7.04887 2.90909 6.77273V4.86364C2.90909 4.58749 2.68523 4.36364 2.40909 4.36364H0.500001C0.223858 4.36364 0 4.58749 0 4.86364V6.77273ZM4.36364 6.77273C4.36364 7.04887 4.58749 7.27273 4.86364 7.27273H6.77273C7.04887 7.27273 7.27273 7.04887 7.27273 6.77273V4.86364C7.27273 4.58749 7.04887 4.36364 6.77273 4.36364H4.86364C4.58749 4.36364 4.36364 4.58749 4.36364 4.86364V6.77273ZM9.22727 0C8.95113 0 8.72727 0.223858 8.72727 0.5V2.40909C8.72727 2.68523 8.95113 2.90909 9.22727 2.90909H11.1364C11.4125 2.90909 11.6364 2.68523 11.6364 2.40909V0.500001C11.6364 0.223858 11.4125 0 11.1364 0H9.22727ZM4.36364 2.40909C4.36364 2.68523 4.58749 2.90909 4.86364 2.90909H6.77273C7.04887 2.90909 7.27273 2.68523 7.27273 2.40909V0.500001C7.27273 0.223858 7.04887 0 6.77273 0H4.86364C4.58749 0 4.36364 0.223858 4.36364 0.5V2.40909ZM8.72727 6.77273C8.72727 7.04887 8.95113 7.27273 9.22727 7.27273H11.1364C11.4125 7.27273 11.6364 7.04887 11.6364 6.77273V4.86364C11.6364 4.58749 11.4125 4.36364 11.1364 4.36364H9.22727C8.95113 4.36364 8.72727 4.58749 8.72727 4.86364V6.77273ZM8.72727 11.1364C8.72727 11.4125 8.95113 11.6364 9.22727 11.6364H11.1364C11.4125 11.6364 11.6364 11.4125 11.6364 11.1364V9.22727C11.6364 8.95113 11.4125 8.72727 11.1364 8.72727H9.22727C8.95113 8.72727 8.72727 8.95113 8.72727 9.22727V11.1364Z" fill="currentColor"></path>
@@ -25,7 +30,7 @@
           </svg>
       </div>
     </div>
-    <notes  :notes="notes" :grid="grid" @remove="removeNote" />
+    <notes  :notes="notesFilter" :grid="grid" @remove="removeNote" />
     <!-- note list -->
    
     </div>
@@ -40,12 +45,13 @@
 import message from '@/components/Message.vue'
 import newNote from '@/components/NewNote.vue'
 import notes from '@/components/Notes.vue'
+import search from '@/components/Search.vue'
 
 
 
 export default {
   components: {
-    message: message, newNote, notes
+    message: message, newNote, notes, search
     
   },
   data(){
@@ -53,6 +59,7 @@ export default {
       title: 'Notes App',
       message: null,
       grid: true,
+      search: '',
       note: {
         title: '',
         descr: ''
@@ -78,6 +85,24 @@ export default {
     }
     
   },
+    computed: {
+    notesFilter () {
+      let array = this.notes,
+          search = this.search
+      if (!search) return array
+      // Small
+      search = search.trim().toLowerCase()
+      // Filter
+      array = array.filter(function (item) {
+        if (item.title.toLowerCase().indexOf(search) !== -1) {
+          return item
+        }
+      })
+      // Error
+      return array
+    }
+  },
+
    methods: {
     addNote () {
       // console.log(this.note)

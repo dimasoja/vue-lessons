@@ -23,7 +23,7 @@ export default {
       require: true
     },
     grid: {
-      type: Array,
+     type: Boolean,
       require: true
     }
   },
